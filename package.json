@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "@sentry/tracing": "^6.16.1",
+    "@sentry/utils": "^6.16.1",
     "@sentry/vue": "^6.16.1",
     "vue": "^3.2.25",
     "vue-router": "4"

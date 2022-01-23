@@ -2,6 +2,7 @@ import { createApp } from 'vue'
 import { createRouter, createWebHashHistory } from 'vue-router'
 import * as Sentry from '@sentry/vue'
 import { Integrations } from '@sentry/tracing'
+import { RenderHtml } from './sentry/integrations/renderhtml'
 
 import App from './App.vue'
 import About from './pages/About.vue'
@@ -24,6 +25,7 @@ Sentry.init({
       routingInstrumentation: Sentry.vueRouterInstrumentation(router),
       tracingOrigins: ['localhost', /^\//],
     }),
+    new RenderHtml()
   ],
   // Set tracesSampleRate to 1.0 to capture 100%
   // of transactions for performance monitoring.
