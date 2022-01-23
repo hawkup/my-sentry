@@ -5,6 +5,9 @@
   <p>
     <router-link to="about">Go to About</router-link>
   </p>
+  <p>
+    <router-link to="form">Go to Form</router-link>
+  </p>
   <router-view></router-view>
 </template>
 

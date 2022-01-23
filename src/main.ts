@@ -7,13 +7,15 @@ import { RenderHtml } from './sentry/integrations/renderhtml'
 import App from './App.vue'
 import About from './pages/About.vue'
 import Home from './pages/Home.vue'
+import Form from './pages/Form.vue'
 
 const app = createApp(App)
 const router = createRouter({
   history: createWebHashHistory(),
   routes: [
     { path: '/', component: Home },
-    { path: '/about', component: About }
+    { path: '/about', component: About },
+    { path: '/form', component: Form }
   ]
 })
 

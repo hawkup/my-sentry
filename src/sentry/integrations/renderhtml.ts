@@ -26,7 +26,6 @@ export class RenderHtml implements Integration {
     addGlobalEventProcessor((event: Event, hint?: EventHint) => {
       if (hub.getIntegration(RenderHtml)) {
         if (event.exception) {
-          console.log(event)
           try {
             const endpoint = attachmentUrlFromDsn(
               hub.getClient().getDsn(),
