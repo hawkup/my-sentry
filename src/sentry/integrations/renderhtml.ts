@@ -1,7 +1,5 @@
-import { Dsn, Event, EventHint, EventProcessor, Hub, Integration } from '@sentry/types'
-import { getGlobalObject } from '@sentry/utils'
-
-const global = getGlobalObject<Window | NodeJS.Global>()
+import { Event, EventHint, EventProcessor, Hub, Integration } from '@sentry/types'
+import { attachmentUrlFromDsn } from '../utils'
 
 export class RenderHtml implements Integration {
   /**
@@ -17,9 +15,7 @@ export class RenderHtml implements Integration {
   /**
    * @inheritDoc
    */
-  public constructor(options = {}) {
-
-  }
+  public constructor(options = {}) {}
 
   /**
    * @inheritDoc
@@ -32,7 +28,7 @@ export class RenderHtml implements Integration {
         if (event.exception) {
           console.log(event)
           try {
-            const endpoint = this.attachmentUrlFromDsn(
+            const endpoint = attachmentUrlFromDsn(
               hub.getClient().getDsn(),
               event.event_id
             )
@@ -60,13 +56,5 @@ export class RenderHtml implements Integration {
         }
       }
     })
-  }
-
-  private attachmentUrlFromDsn(dsn: Dsn, eventId: string): string {
-    const { host, path, projectId, port, protocol, user } = dsn
-
-    return `${protocol}://${host}${port !== '' ? `:${port}` : ''}${
-      path !== '' ? `/${path}` : ''
-    }/api/${projectId}/events/${eventId}/attachments/?sentry_key=${user}&sentry_version=7&sentry_client=custom-javascript`
   }
 }
