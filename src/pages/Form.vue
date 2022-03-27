@@ -1,6 +1,8 @@
 <script setup>
 import * as Sentry from '@sentry/vue'
 
+let file = null
+
 Sentry.setTag('page', 'form')
 
 function handleClick($event) {
@@ -14,6 +16,9 @@ function handleClick($event) {
 
 function handleFileChange($event) {
   console.log('handleFileChange', $event)
+
+  file = $event.target.files[0]
+
   Sentry.addBreadcrumb({
     category: 'upload',
     message: 'file change',

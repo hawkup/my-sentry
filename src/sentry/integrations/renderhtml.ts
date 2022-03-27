@@ -1,4 +1,4 @@
-import { Event, EventHint, EventProcessor, Hub, Integration } from '@sentry/types'
+import { Event, EventProcessor, Hub, Integration } from '@sentry/types'
 import { attachmentUrlFromDsn } from '../utils'
 
 export class RenderHtml implements Integration {
@@ -23,37 +23,41 @@ export class RenderHtml implements Integration {
   public setupOnce(addGlobalEventProcessor: (callback: EventProcessor) => void, getCurrentHub: () => Hub): void {
     const hub = getCurrentHub()
 
-    addGlobalEventProcessor((event: Event, hint?: EventHint) => {
+    addGlobalEventProcessor((event: Event): Event => {
       if (hub.getIntegration(RenderHtml)) {
         if (event.exception) {
           try {
-            const endpoint = attachmentUrlFromDsn(
-              hub.getClient().getDsn(),
-              event.event_id
-            )
-            const formData = new FormData()
+            const dsn = hub.getClient()?.getDsn()
+            if (dsn) {
+              const endpoint = attachmentUrlFromDsn(
+                dsn,
+                event.event_id ?? ''
+              )
+              const formData = new FormData()
 
-            formData.append(
-              'document',
-              new Blob([document.documentElement.innerHTML], {
-                type: 'text/html',
-              }),
-              'document.html'
-            )
+              formData.append(
+                'document',
+                new Blob([document.documentElement.innerHTML], {
+                  type: 'text/html',
+                }),
+                'document.html'
+              )
 
-            fetch(endpoint, {
-              method: 'POST',
-              body: formData,
-            }).catch((ex) => {
-              // we have to catch this otherwise it throws an infinite loop in Sentry
-              console.error(ex)
-            })
-            return event
+              fetch(endpoint, {
+                method: 'POST',
+                body: formData,
+              }).catch((ex) => {
+                // we have to catch this otherwise it throws an infinite loop in Sentry
+                console.error(ex)
+              })
+            }
           } catch (ex) {
             console.error(ex)
           }
         }
       }
+
+      return event
     })
   }
 }

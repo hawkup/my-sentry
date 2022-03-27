@@ -3,6 +3,7 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 import * as Sentry from '@sentry/vue'
 import { Integrations } from '@sentry/tracing'
 import { RenderHtml } from './sentry/integrations/renderhtml'
+import { Image } from './sentry/integrations/image'
 
 import App from './App.vue'
 import About from './pages/About.vue'
@@ -21,13 +22,14 @@ const router = createRouter({
 
 Sentry.init({
   app,
-  dsn: import.meta.env.VITE_SENTRY_DSN,
+  dsn: import.meta.env.VITE_SENTRY_DSN?.toString(),
   integrations: [
     new Integrations.BrowserTracing({
       routingInstrumentation: Sentry.vueRouterInstrumentation(router),
       tracingOrigins: ['localhost', /^\//],
     }),
-    new RenderHtml()
+    new RenderHtml(),
+    new Image()
   ],
   // Set tracesSampleRate to 1.0 to capture 100%
   // of transactions for performance monitoring.
