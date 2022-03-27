@@ -4,7 +4,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc --noEmit && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "release": "./scripts/release.sh"
   },
   "dependencies": {
     "@sentry/tracing": "^6.16.1",
